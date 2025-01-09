@@ -1,0 +1,23 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Installing Prowler and dependencies..."
+      - pip3 install prowler
+      - prowler -v
+  build:
+    commands:
+      - echo "Running Prowler as prowler $PROWLER_OPTIONS"
+      - prowler $PROWLER_OPTIONS || true  # Using '|| true' to prevent the build from failing due to Prowler scan results
+  post_build:
+    commands:
+      - echo "Sent findings to SecurityHub..."
+      - echo "Uploading reports to S3..."
+      - aws s3 cp --exclude "*" --include "*.ocsf.json" output/ s3://$BUCKET_REPORT/ocsf-json/ --recursive
+      - aws s3 cp --exclude "*" --include "*.json" --exclude "*.ocsf.json" --exclude "*.asff.json" output/ s3://$BUCKET_REPORT/json/ --recursive
+      - aws s3 cp --exclude "*" --include "*.asff.json" output/ s3://$BUCKET_REPORT/asff-json/ --recursive
+      - echo "Done!"
+
+      
