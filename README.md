@@ -28,7 +28,6 @@ You can set the following environment variables in the AWS CodeBuild project:
     AWS_REGION: The region to deploy the services.
     PROWLER_OPTIONS: Any specific options you wish to pass to Prowler.
     BUCKET_REPORT: The name of the S3 bucket where reports should be uploaded.
-    SLACK_WEBHOOK_URL: The Slack webhook URL for notifications.
 
 ### Running a Build
 
